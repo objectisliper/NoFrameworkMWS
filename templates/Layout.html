@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% for item in menuItems %}
+<a href="{{ item['href'] }}">{{ item['text'] }}</a><br>
+{% endfor %}
+<hr>
+{% block content %}
+{% endblock %}
+</body>
+</html>

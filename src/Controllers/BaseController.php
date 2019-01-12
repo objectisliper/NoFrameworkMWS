@@ -10,7 +10,8 @@ namespace App\Controllers;
 
 use Http\Request;
 use Http\Response;
-use App\Template\Renderer;
+use App\Template\FrontendRenderer;
+use App\Page\PageReader;
 
 
 
@@ -23,16 +24,23 @@ class BaseController
     public function __construct(
         Request $request,
         Response $response,
-        Renderer $renderer
+        FrontendRenderer $renderer,
+        PageReader $pageReader
     ) {
         $this->request = $request;
         $this->response = $response;
         $this->renderer = $renderer;
+        $this->pageReader = $pageReader;
     }
 
     protected function renderTemplate($template, $data){
         $html = $this->renderer->render($template, $data);
-        $this->response->setContent($html);
+        return $this->response->setContent($html);
+    }
+
+    protected function render404(){
+        $this->response->setStatusCode(404);
+        return $this->response->setContent('404 - Page not found');
     }
 
 }

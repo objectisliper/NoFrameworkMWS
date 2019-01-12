@@ -8,12 +8,21 @@
 
 namespace App\Controllers;
 
+use App\Page\InvalidPageException;
 
 class Page extends BaseController
 {
     public function show($params)
     {
-        var_dump($params);
+        $slug = $params['slug'];
+
+        try {
+            $data['content'] = $this->pageReader->readBySlug($slug);
+        } catch (InvalidPageException $e) {
+            return $this->render404();
+        }
+
+        return $this->renderTemplate('Page',$data);
     }
 
 }
