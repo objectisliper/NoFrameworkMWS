@@ -21,6 +21,7 @@ $injector->define('Http\HttpRequest', [
 ]);
 
 $injector->alias('Http\Response', 'Http\HttpResponse');
+$injector->alias('Example\Template\Renderer', 'Example\Template\MustacheRenderer');
 $injector->share('Http\HttpResponse');
 
 return $injector;

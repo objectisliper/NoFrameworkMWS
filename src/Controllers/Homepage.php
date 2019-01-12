@@ -8,6 +8,7 @@
 
 namespace App\Controllers;
 
+use Example\Template\Renderer;
 
 class Homepage extends BaseController
 {
