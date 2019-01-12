@@ -20,8 +20,16 @@ $injector->define('Http\HttpRequest', [
     ':server' => $_SERVER,
 ]);
 
+$injector->define('Mustache_Engine', [
+    ':options' => [
+        'loader' => new Mustache_Loader_FilesystemLoader(dirname(__DIR__) . '/templates', [
+            'extension' => '.html',
+        ]),
+    ],
+]);
+
 $injector->alias('Http\Response', 'Http\HttpResponse');
-$injector->alias('Example\Template\Renderer', 'Example\Template\MustacheRenderer');
+$injector->alias('App\Template\Renderer', 'App\Template\MustacheRenderer');
 $injector->share('Http\HttpResponse');
 
 return $injector;

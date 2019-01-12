@@ -8,15 +8,15 @@
 
 namespace App\Controllers;
 
-use Example\Template\Renderer;
 
 class Homepage extends BaseController
 {
 
     public function show()
     {
-        $content = '<h1>Hello World</h1>';
-        $content .= 'Hello ' . $this->request->getParameter('name', 'stranger');
-        $this->response->setContent($content);
+        $data = [
+            'name' => $this->request->getParameter('name', 'stranger'),
+        ];
+        $this->renderTemplate('Homepage', $data);
     }
 }
