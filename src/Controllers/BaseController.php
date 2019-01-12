@@ -10,8 +10,7 @@ namespace App\Controllers;
 
 use Http\Request;
 use Http\Response;
-use App\Template\FrontendRenderer;
-use App\Page\PageReader;
+use App\Template\TwigRenderer;
 
 
 
@@ -24,23 +23,27 @@ class BaseController
     public function __construct(
         Request $request,
         Response $response,
-        FrontendRenderer $renderer,
-        PageReader $pageReader
+        TwigRenderer $renderer
     ) {
         $this->request = $request;
         $this->response = $response;
         $this->renderer = $renderer;
-        $this->pageReader = $pageReader;
     }
 
-    protected function renderTemplate($template, $data){
-        $html = $this->renderer->render($template, $data);
+    protected function renderTemplate($template, $data=[]){
+        $html = isset($data) ? $this->renderer->render($template, $data) : $this->renderer->render($template);
         return $this->response->setContent($html);
     }
 
     protected function render404(){
         $this->response->setStatusCode(404);
         return $this->response->setContent('404 - Page not found');
+    }
+
+    protected function redirect($url){
+        header('Location: ' . $url, true, 301);
+
+        exit();
     }
 
 }

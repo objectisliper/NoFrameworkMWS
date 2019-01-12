@@ -16,11 +16,13 @@ error_reporting(E_ALL);
 
 $environment = 'development';
 
+session_start();
 /**
  * Register the error handler
  */
 $whoops = new \Whoops\Run;
 if ($environment !== 'production') {
+    mysqli_report(MYSQLI_REPORT_ALL);
     $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
 } else {
     $whoops->pushHandler(function($e){
