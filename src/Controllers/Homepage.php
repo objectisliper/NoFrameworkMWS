@@ -9,11 +9,13 @@
 namespace App\Controllers;
 
 
-class Homepage
+class Homepage extends BaseController
 {
+
     public function show()
     {
-        echo 'Hello World';
+        $content = '<h1>Hello World</h1>';
+        $content .= 'Hello ' . $this->request->getParameter('name', 'stranger');
+        $this->response->setContent($content);
     }
-
 }
