@@ -8,7 +8,7 @@
 
 declare(strict_types = 1);
 
-namespace Bootstrap;
+namespace App;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -56,9 +56,12 @@ switch ($routeInfo[0]) {
         $response->setStatusCode(405);
         break;
     case \FastRoute\Dispatcher::FOUND:
-        $handler = $routeInfo[1];
+        $className = $routeInfo[1][0];
+        $method = $routeInfo[1][1];
         $vars = $routeInfo[2];
-        call_user_func($handler, $vars);
+
+        $class = new $className;
+        $class->$method($vars);
         break;
 }
 
