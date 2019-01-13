@@ -22,7 +22,6 @@ session_start();
  */
 $whoops = new \Whoops\Run;
 if ($environment !== 'production') {
-    mysqli_report(MYSQLI_REPORT_ALL);
     $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
 } else {
     $whoops->pushHandler(function($e){

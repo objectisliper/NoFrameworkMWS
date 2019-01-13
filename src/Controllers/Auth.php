@@ -20,7 +20,7 @@ class Auth extends BaseController
         $data = $this->request->getBodyParameters();
         $user = new User;
         if ($user->validateUser($data['username'], $data['password'])){
-            $_SESSION['userlogin'] = $data['username'];
+            $_SESSION['username'] = $data['username'];
             $_SESSION['auth'] = True;
             $this->redirect('/');
         }
@@ -28,5 +28,11 @@ class Auth extends BaseController
             $error = "Wrong password or username!";
             $this->renderTemplate('Login', ['error' => $error]);
         }
+    }
+
+    public function logout(){
+        $_SESSION['auth'] = null;
+        $_SESSION['username'] = "";
+        $this->redirect('/');
     }
 }

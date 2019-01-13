@@ -26,4 +26,27 @@ class TaskController extends BaseController
         return $this->renderTemplate('CreateTask');
     }
 
+    public function editTask($params){
+        if($this->request->getMethod() === "POST"){
+            $data = $this->request->getBodyParameters();
+            if ((new TaskModel())->updateTaskById($data,$params['id'])){
+                $this->redirect('/');
+            }
+            else{
+                return $this->renderTemplate('EditTask', ['error' => 'Something went wrong, try again later']);
+            }
+        }
+        elseif ($this->request->getMethod() === "PUT") {
+            if ((new TaskModel())->updateTaskById(["complete" => 1],$params['id'])){
+                return $this->renderTemplate(json_encode('success'));
+            }
+            else{
+                return $this->renderTemplate('EditTask', ['error' => 'Something went wrong, try again later']);
+            }
+        }
+
+        $data['task'] = (new TaskModel())->getTaskById($params['id']);
+        return $this->renderTemplate('EditTask', $data);
+    }
+
 }

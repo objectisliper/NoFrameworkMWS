@@ -8,15 +8,15 @@
 
 namespace App\Controllers;
 
+use App\Models\TaskModel;
 
 class Homepage extends BaseController
 {
 
     public function show()
     {
-        $data = [
-            'name' => $this->request->getParameter('name', 'stranger'),
-        ];
+        $data['tasks'] = (new TaskModel)->getAll();
+        $data['auth'] = isset($_SESSION['auth']);
         $this->renderTemplate('Homepage', $data);
     }
 }

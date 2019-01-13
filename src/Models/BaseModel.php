@@ -53,13 +53,18 @@ class BaseModel
         return !isset($mysqli->error);
     }
 
-    protected function getAll() {
+    public function getAll() {
         $table = $this->dbConfig["table"];
         $query = "SELECT * FROM $table;";
-        return $result = $this->mysqli->query($query);
+        $result = $this->mysqli->query($query);
+        $data = array();
+        while($row = $result->fetch_row()){
+            $data[] = $row;
+        }
+        return $data;
     }
 
-    protected function get($fields) {
+    public function get($fields) {
         $table = $this->dbConfig["table"];
         $query = "SELECT ";
         foreach ($fields as $value) {
@@ -68,7 +73,7 @@ class BaseModel
         $query = substr($query, 0, -2);
         $query.=" FROM $table";
 
-        return $result = $this->mysqli->query($query);
+        return $result = $this->mysqli->query($query, MYSQLI_USE_RESULT);
     }
 
     protected function getByKeys($keys) {
@@ -105,16 +110,28 @@ class BaseModel
         return isset($result) ? $result : Null;
     }
 
-    protected function delete($key, $value) {
+    protected function update($values, $filterValues) {
         $table = $this->dbConfig["table"];
-        $query = "DELETE FROM $table WHERE $key='$value';";
-        return $result = $this->mysqli->query($query);
-    }
-
-    protected function update($key, $value, $where_key, $where_value) {
-        $table = $this->dbConfig["table"];
-        $query = "UPDATE $table SET $key ='$value' WHERE $where_key='$where_value';";
-        return $result = $this->mysqli->query($query);
+        $query = "UPDATE $table SET ";
+        $types = "";
+        foreach ($values as $key => $value){
+            $query.="$key = ?, ";
+            $types.=substr(gettype($value),0,1);
+            $preparedData[$key] = &$values[$key];
+        }
+        $query = substr($query, 0, -2);
+        $query .= " WHERE ";
+        foreach ($filterValues as $key => $value){
+            $query.="$key = ?, AND ";
+            $types.=substr(gettype($value),0,1);
+            $preparedData[$key.'2'] = &$filterValues[$key];
+        }
+        $query = substr($query, 0, -6);
+        $preparedQuery = $this->mysqli->prepare($query);
+        array_unshift($preparedData,$types);
+        call_user_func_array(array($preparedQuery, 'bind_param'), $preparedData);
+        $preparedQuery->execute();
+        return !isset($mysqli->error);
     }
 
 }

@@ -27,4 +27,13 @@ class TaskModel extends BaseModel
         return $this->create($data);
     }
 
+    public function getTaskById($id){
+        return $this->getByKeys(['id' => $id])[0];
+    }
+
+    public function updateTaskById($values, $id)
+    {
+        return $this->update($values, ['id' => $id]);
+    }
+
 }
