@@ -14,7 +14,7 @@ require __DIR__ . '/../vendor/autoload.php';
 
 error_reporting(E_ALL);
 
-$environment = 'development';
+$environment = 'production';
 
 session_start();
 /**
@@ -25,7 +25,7 @@ if ($environment !== 'production') {
     $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
 } else {
     $whoops->pushHandler(function($e){
-        echo 'Todo: Friendly error page and send an email to the developer';
+        echo 'Something went wrong';
     });
 }
 $whoops->register();
